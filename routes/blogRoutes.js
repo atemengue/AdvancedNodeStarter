@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
+const { clearHash } = require('../services/cache');
 
 const Blog = mongoose.model('Blog');
 
@@ -35,7 +36,9 @@ module.exports = app => {
     // }
     // if no, we need to respond to request
     // and update our cache to store the data
-    const blogs = await Blog.find({ _user: req.user.id }).cache();
+    const blogs = await Blog.find({ _user: req.user.id }).cache({
+      key: req.user.id
+    });
     res.send(blogs);
 
     // client.set(req.user.id, JSON.stringify(blogs));
@@ -56,5 +59,7 @@ module.exports = app => {
     } catch (err) {
       res.send(400, err);
     }
+
+    clearHash(req.user.id);
   });
 };
