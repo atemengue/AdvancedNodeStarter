@@ -1,5 +1,7 @@
 /** @format */
 const puppeteer = require('puppeteer');
+const sessionFactory = require('./factories/sessionFactory');
+const userFactory = require('./factories/UserFactory');
 
 let browser, page;
 
@@ -32,23 +34,20 @@ test('clicking login and start google authFlow', async () => {
 });
 
 test('when signed in, show the logout button', async () => {
-  const id = '5e69927c4c341c33ee3b6b09';
-  const Buffer = require('safe-buffer').Buffer;
-  const sessionObject = {
-    passport: {
-      user: id
-    }
-  };
-  const sessionString = Buffer.from(JSON.stringify(sessionObject)).toString(
-    'base64'
-  );
+  const user = await userFactory();
+  console.log(user);
+  const { session, sig } = sessionFactory(user);
 
-  const Keygrip = require('keygrip');
-  const keys = require('../config/keys');
-  const keygrip = new Keygrip([keys.cookieKey]);
-  const sig = keygrip.sign('session=' + sessionString);
+  //console.log(sessionString, sig); // generating Sessions and Signatures
 
-  console.log(sessionString, sig); // generating Sessions and Signatures
+  await page.setCookie({ name: 'session', value: session });
+  await page.setCookie({ name: 'session.sig', value: sig });
+  await page.goto('localhost:3000');
+  await page.waitFor('a[href="/auth/logout"]');
+
+  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+
+  expect(text).toEqual('Logout');
 });
 
 afterEach(async () => {
