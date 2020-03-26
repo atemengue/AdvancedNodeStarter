@@ -1,5 +1,5 @@
 /** @format */
-const Page = require('../helpers/page');
+const Page = require('./helpers/page');
 
 let page;
 
