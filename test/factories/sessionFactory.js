@@ -6,7 +6,6 @@ const keys = require('../../config/keys');
 const keygrip = new Keygrip([keys.cookieKey]);
 
 module.exports = user => {
-  console.log(user);
   const sessionObject = {
     passport: {
       user: user._id.toString()

@@ -1,16 +1,12 @@
 /** @format */
-const puppeteer = require('puppeteer');
 const sessionFactory = require('./factories/sessionFactory');
 const userFactory = require('./factories/UserFactory');
+const Page = require('../helpers/page');
 
-let browser, page;
+let page;
 
 beforeEach(async () => {
-  browser = await puppeteer.launch({
-    headless: false,
-    executablePath: '/usr/bin/chromium-browser'
-  });
-  page = await browser.newPage();
+  page = await Page.build();
   await page.goto('localhost:3000');
 });
 
@@ -50,5 +46,5 @@ test('when signed in, show the logout button', async () => {
 });
 
 afterEach(async () => {
-  await browser.close();
+  await page.close();
 });
