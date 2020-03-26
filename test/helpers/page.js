@@ -7,8 +7,8 @@ const sessionFactory = require('../factories/sessionFactory');
 class CustomPage {
   static async build() {
     const browser = await puppeteer.launch({
-      headless: false,
-      executablePath: '/usr/bin/chromium-browser'
+      headless: true,
+      args: ['--no-sandbox']
     });
     const page = await browser.newPage();
     const customPage = new CustomPage(page);
