@@ -35,7 +35,6 @@ test('clicking login and start google authFlow', async () => {
 
 test('when signed in, show the logout button', async () => {
   const user = await userFactory();
-  console.log(user);
   const { session, sig } = sessionFactory(user);
 
   //console.log(sessionString, sig); // generating Sessions and Signatures
