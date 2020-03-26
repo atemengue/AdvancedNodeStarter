@@ -1,5 +1,5 @@
 /** @format */
-// jest.setTimeout(10000); if the testing environnement doesn't support 5000
+jest.setTimeout(10000); // if the testing environnement doesn't support 5000
 
 require('../models/User');
 
